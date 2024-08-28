@@ -47,7 +47,7 @@ function ChevronDownIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProps) {
-    const BASE_URL = 'https://backend-jet-nine.vercel.app';
+    const BASE_URL = 'https://course-scanner-backend.vercel.app/';
     const searchParams = useSearchParams();
 
     useEffect(() => {

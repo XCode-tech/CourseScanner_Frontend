@@ -30,7 +30,7 @@ interface BrandName {
 
 export function Component() {
     // export function Index = () => {
-    const BASE_URL = 'https://backend-jet-nine.vercel.app';
+    const BASE_URL = 'https://course-scanner-backend.vercel.app/';
     const [selectedCourseId, setSelectedCourseId] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
