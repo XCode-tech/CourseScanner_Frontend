@@ -90,7 +90,7 @@ export function Component() {
 
 
     const topCourses = [
-        { coursename: 'Designing and Implementing a Microsoft Azure AI Solution (AI-102)', brandname: 'CompTIA', region: 'USA', url: '/searchcourse?course_name=AI-102' },
+        { coursename: 'Designing and Implementing a Microsoft Azure AI Solution (AI-102T00)', brandname: 'CompTIA', region: 'USA', url: '/searchcourse?course_name=AI-102T00' },
         { coursename: 'CompTIA Security+', brandname: 'CompTIA', region: 'USA', url: '/searchcourse?course_name=CompTIA Security+' },
         { coursename: 'Engineering Cisco Meraki Solutions', brandname: 'Cisco', region: 'USA', url: '/searchcourse?course_name=Engineering Cisco Meraki Solutions' },
         { coursename: 'Practical Data Science with Amazon SageMaker', brandname: 'Aws', region: 'USA', url: '/searchcourse?course_name=Amazon SageMaker' },
