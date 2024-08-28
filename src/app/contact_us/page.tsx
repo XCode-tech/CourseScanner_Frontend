@@ -41,7 +41,7 @@ export default function Component() {
         }
 
         try {
-            const response = await axios.post("https://course-scanner-backend.vercel.app//api/contact", formData);
+            const response = await axios.post("https://course-scanner-backend.vercel.app/api/contact", formData);
             setSuccess(response.data.message);
             setFormData({
                 name: "",

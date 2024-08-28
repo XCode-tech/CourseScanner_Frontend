@@ -171,7 +171,7 @@ const Filters = ({
 }
 
 const CoursesPage = () => {
-  const BASE_URL = 'https://course-scanner-backend.vercel.app/';
+  const BASE_URL = 'https://course-scanner-backend.vercel.app';
   const searchParams = useSearchParams();
   const courseName = searchParams ? searchParams.get('course_name') || '' : '';
   const [courses, setCourses] = useState<Course[]>([]);
