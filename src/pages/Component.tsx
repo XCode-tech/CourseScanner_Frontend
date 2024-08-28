@@ -196,16 +196,17 @@ export function Component() {
                                 <div className="border-l border-gray-300 mx-4 hidden md:block"></div>
                                 <div className="flex flex-col w-full md:w-1/5">
                                     <label htmlFor="course-id" className="text-sm font-bold">Course Name</label>
-                                    <select id="course-id" name="course-id" value={selectedCourseId} onChange={handleCourseNameChange} className="w-full bg-transparent focus:outline-none" autoComplete="course-id">
-                                        <option value="">Select Course Name</option>
-                                        {courseNames.map((course, index) => (
-                                            <option key={index} value={course.course_id}>
-                                                {course.coursename.includes('\n')
-                                                    ? course.coursename.substring(0, course.coursename.indexOf('\n'))
-                                                    : course.coursename}
-                                            </option>
-                                        ))}
-                                    </select>
+				<select id="course-id" name="course-id" value={selectedCourseId} onChange={handleCourseNameChange} className="w-full bg-transparent focus:outline-none" autoComplete="course-id">
+				    <option value="">Select Course Name</option>
+				    {courseNames.map((course, index) => (
+				        <option key={index} value={course.course_id}>
+				            {course.coursename && course.coursename.includes('\n')
+				                ? course.coursename.substring(0, course.coursename.indexOf('\n'))
+				                : course.coursename || 'No Course Name'}
+				        </option>
+				    ))}
+				</select>
+
 
 
                                 </div>
