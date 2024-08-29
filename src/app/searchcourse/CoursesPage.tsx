@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 interface Course {
+  website: string;
   brandname: string;
   coursename: string;
   duration: string;
