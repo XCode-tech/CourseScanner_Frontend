@@ -90,7 +90,7 @@ const CourseList = ({
                   Start Date: {course.start_date}
                 </p>
                 <p className="text-muted-foreground mb-4">
-                  Company: {course.duration}
+                  Company: {course.website}
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold">${course.price}</span>
