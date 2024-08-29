@@ -256,38 +256,26 @@ export function Component() {
                     </div>
                 </section>
 
-                <h1 className="text-3xl md:text-5xl font-bold mb-4 mt-24 text-center text-white">About</h1><br />
-                <div className="flex h-80 bg-black">
-                    {/* Image covering half of the window */}
-                    <div className="w-1/2 flex items-center justify-center">
-                        <div className="max-w-md mx-auto" style={{ marginLeft: "15%" }}>
-                            <p className="font-bold text-white text-left text-2xl mb-2">
+                <h1 className="text-3xl md:text-5xl font-bold mb-4 mt-24 text-center text-white">About</h1>
+                <br />
+                <div className="flex flex-col md:flex-row h-auto md:h-80 bg-black">
+                    {/* Text Section */}
+                    <div className="w-full md:w-1/2 flex items-center justify-center p-4">
+                        <div className="max-w-md mx-auto">
+                            <p className="font-bold text-white text-left text-xl md:text-2xl mb-2">
                                 Tired of searching high and low for the best price on the <span className="text-[#ddbd48]">latest technical training</span>?
                             </p>
                             <p className="text-white text-left mb-2">
                                 ----------------------
                             </p>
-                            <p className="text-left mb-4 text-white">
+                            <p className="text-left mb-4 text-white text-base md:text-lg">
                                 We understand your struggle. With the ever-growing landscape of IT courses, navigating the pricing maze can be overwhelming. We use cutting-edge technology to analyze course listings across a vast network of learning platforms. This allows you to:
                             </p>
                         </div>
                     </div>
 
-                    {/* Content on the right side */}
-                    {/* <div className="w-1/2 flex items-center justify-center">
-                        <div className="max-w-md mx-auto">
-                            <p className="font-bold text-white text-left text-2xl mb-2">
-                                Tired of searching high and low for the best price on the latest technical training?
-                            </p>
-                            <p className="text-white text-left mb-2">
-                                ----------------------
-                            </p>
-                            <p className="text-left mb-4">
-                                We understand your struggle. With the ever-growing landscape of IT courses, navigating the pricing maze can be overwhelming. We use cutting-edge technology to analyze course listings across a vast network of learning platforms. This allows you to:
-                            </p>
-                        </div>
-                    </div> */}
-                    <div className="w-1/2 flex">
+                    {/* Image Section */}
+                    <div className="w-full md:w-1/2 flex items-center justify-center">
                         <Image
                             src="/bg.jpg"
                             alt="Sunset"
@@ -296,7 +284,6 @@ export function Component() {
                             height={720}
                         />
                     </div>
-
                 </div>
                 <br /><br />
 
