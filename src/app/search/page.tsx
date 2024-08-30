@@ -154,14 +154,21 @@ export default function CoursesPage() {
                                     />
                                 </div>
                                 <div className="p-6">
-#                                    <h2 className="text-xl font-bold mb-2">{course.coursename}</h2>
+                                    <h2 className="text-xl font-bold mb-2">{course.coursename}</h2>
                                     <h2 className="text-xl font-bold">{course.coursename.substring(0, course.coursename.indexOf('\n') + 1)}</h2>
-                                    <p className="text-muted-foreground mb-4">
-                                        Duration: {course.duration}
-                                    </p>
-                                    <p className="text-muted-foreground mb-4">
-                                        Start Date: {course.start_date}
-                                    </p>
+                                        {course.duration && (
+                                          <p className="text-muted-foreground mb-4">
+                                            Duration: {course.duration}
+                                          </p>
+                                        )}
+                                      
+                                        {course.start_date && (
+                                          <p className="text-muted-foreground mb-4">
+                                            Start Date: {course.start_date}
+                                          </p>
+                                        )}
+                                    
+
                                     <p className="text-muted-foreground mb-4">
                                         Company: {course.website}
                                     </p>
