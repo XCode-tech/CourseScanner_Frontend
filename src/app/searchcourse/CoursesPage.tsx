@@ -88,6 +88,7 @@ const CourseList = ({
                     course.coursename.substring(0, course.coursename.indexOf('\n') + 1) : 
                     course.coursename}
                 </h2>
+                <br />
 
                 <p className="text-muted-foreground mb-4">
                   Duration: {course.duration}
