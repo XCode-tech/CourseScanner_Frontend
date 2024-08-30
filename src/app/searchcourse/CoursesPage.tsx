@@ -83,7 +83,12 @@ const CourseList = ({
                 />
               </div>
               <div className="p-6">
-                <h2 className="text-xl font-bold">{course.coursename.substring(0, course.coursename.indexOf('\n') + 1)}</h2>
+                <h2 className="text-xl font-bold">
+                  {course.coursename.indexOf('\n') !== -1 ? 
+                    course.coursename.substring(0, course.coursename.indexOf('\n') + 1) : 
+                    course.coursename}
+                </h2>
+
                 <p className="text-muted-foreground mb-4">
                   Duration: {course.duration}
                 </p>
