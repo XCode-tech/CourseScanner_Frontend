@@ -83,6 +83,7 @@ function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProp
                 const rawData = await response.json();
 
                 const extractedData: Course[] = rawData.map((course: any) => ({
+                    website: course.website,
                     brandname: course.brandname,
                     coursename: course.coursename,
                     duration: course.duration,
@@ -161,7 +162,7 @@ export default function CoursesPage() {
                                         Start Date: {course.start_date}
                                     </p>
                                     <p className="text-muted-foreground mb-4">
-                                        Company: {course.duration}
+                                        Company: {course.website}
                                     </p>
                                     <div className="flex items-center justify-between">
                                         <span className="text-2xl font-bold">${course.price}</span>
