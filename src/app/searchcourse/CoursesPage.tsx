@@ -93,9 +93,11 @@ const CourseList = ({
                 <p className="text-muted-foreground mb-4">
                   Duration: {course.duration}
                 </p>
-                <p className="text-muted-foreground mb-4">
-                  Start Date: {course.start_date}
-                </p>
+                {course.start_date && (
+                  <p className="text-muted-foreground mb-4">
+                    Start Date: {course.start_date}
+                  </p>
+                )}
                 <p className="text-muted-foreground mb-4">
                   Company: {course.website}
                 </p>
