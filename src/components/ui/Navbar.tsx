@@ -17,7 +17,7 @@ function Navbar() {
                 </Link>
                 
                 <div className="fixed top-4 right-4">
-                    <Link href="/contact_us" className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#ddbd48] text-white shadow-lg hover:bg-blue-400 transition-colors duration-300" prefetch={false}>
+                    <Link href="/contact_us" className="inline-flex items-center justify-center w-28 h-18 rounded-xl bg-[#ddbd48] text-white shadow-lg hover:bg-blue-400 transition-colors duration-300" prefetch={false}>
                         <span className="text-lg font-bold text-center">Contact <br /> us</span>
                     </Link>
                 </div>
