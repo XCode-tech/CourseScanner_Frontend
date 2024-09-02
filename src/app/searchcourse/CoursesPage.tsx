@@ -89,11 +89,10 @@ const CourseList = ({
                     course.coursename}
                 </h2>
                 <br />
-                {course.duration && (
                   <p className="text-muted-foreground mb-4">
-                    Duration: {course.duration}
+                    Duration: {course.duration ? course.duration : 'TBD'}
                   </p>
-                )}
+
               
                 {course.start_date && (
                   <p className="text-muted-foreground mb-4">
