@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useEffect, Suspense } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
 
 interface Course {
@@ -83,18 +81,23 @@ function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProp
                 }
                 const rawData = await response.json();
 
-                const extractedData: Course[] = rawData.map((course: any) => ({
-                    website: course.website,
-                    brandname: course.brandname,
-                    coursename: course.coursename,
-                    duration: course.duration,
-                    price: course.price,
-                    region: course.region,
-                    start_date: course.start_date,
-                    brand_image: course.brand_image,
-                    url: course.url,
-                    course_id: course.course_id
-                }));
+                const currentDate = new Date();
+
+                // Filter out past courses
+                const extractedData: Course[] = rawData
+                    .filter((course: any) => new Date(course.start_date) >= currentDate)
+                    .map((course: any) => ({
+                        website: course.website,
+                        brandname: course.brandname,
+                        coursename: course.coursename,
+                        duration: course.duration,
+                        price: course.price,
+                        region: course.region,
+                        start_date: course.start_date,
+                        brand_image: course.brand_image,
+                        url: course.url,
+                        course_id: course.course_id
+                    }));
 
                 setCourses(extractedData || []);
                 setFilteredCourses(extractedData || []);
@@ -122,6 +125,10 @@ export default function CoursesPage() {
 
     const applyFilters = () => {
         let filtered = [...courses];
+
+        // Filter out past courses again just to be safe
+        const currentDate = new Date();
+        filtered = filtered.filter(course => new Date(course.start_date) >= currentDate);
 
         if (selectedPriceOrder) {
             filtered.sort((a, b) => selectedPriceOrder === 'low-to-high' ? a.price - b.price : b.price - a.price);
@@ -156,51 +163,62 @@ export default function CoursesPage() {
                                 <div className="p-6">
                                     <h2 className="text-xl font-bold mb-2">{course.coursename}</h2>
                                     <h2 className="text-xl font-bold">{course.coursename.substring(0, course.coursename.indexOf('\n') + 1)}</h2>
-                                        {course.duration && (
-                                          <p className="text-muted-foreground mb-4">
+                                    {course.duration && (
+                                        <p className="text-muted-foreground mb-4">
                                             Duration: {course.duration}
-                                          </p>
-                                        )}
-                                      
-                                        {course.start_date && (
-                                          <p className="text-muted-foreground mb-4">
+                                        </p>
+                                    )}
+                                    {course.start_date && (
+                                        <p className="text-muted-foreground mb-4">
                                             Start Date: {course.start_date}
-                                          </p>
-                                        )}
-                                    
-
+                                        </p>
+                                    )}
                                     <p className="text-muted-foreground mb-4">
                                         Company: {course.website}
                                     </p>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-2xl font-bold">${course.price}</span>
-                                        <Link href={course.url} target="_blank" rel="noopener noreferrer">
-                                            <Button size="sm">Enroll</Button>
+                                        <span className="text-2xl font-bold">${course.price.toFixed(2)}</span>
+                                        <Link href={course.url} passHref>
+                                            <Button>View Course</Button>
                                         </Link>
                                     </div>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <p className="text-xl font-semibold text-gray-600">No courses available</p>
+                        <p>No courses available.</p>
                     )}
                 </div>
             </div>
-            <div className="bg-card rounded-lg shadow-md p-6">
-                <h2 className="text-xl font-bold mb-4">Filters</h2>
-                <div className="grid gap-4">
+            <div className="md:sticky top-0">
+                <h2 className="text-2xl font-bold mb-4">Filters</h2>
+                <div className="space-y-4">
                     <div>
-                        <Label htmlFor="price" className="text-sm font-medium">
-                            Price
-                        </Label>
+                        <Label htmlFor="region">Region</Label>
                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full justify-between">
-                                    Price
-                                    <ChevronDownIcon className="h-4 w-4" />
-                                </Button>
+                            <DropdownMenuTrigger>
+                                <SelectTrigger>
+                                    <SelectValue>{selectedRegion}</SelectValue>
+                                </SelectTrigger>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
+                            <DropdownMenuContent>
+                                <DropdownMenuRadioGroup value={selectedRegion} onValueChange={setSelectedRegion}>
+                                    <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="UK">UK</DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="USA">USA</DropdownMenuRadioItem>
+                                </DropdownMenuRadioGroup>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                    <div>
+                        <Label htmlFor="price">Price</Label>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <SelectTrigger>
+                                    <SelectValue>{selectedPriceOrder ? `Price (${selectedPriceOrder})` : 'Price'}</SelectValue>
+                                </SelectTrigger>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
                                 <DropdownMenuRadioGroup value={selectedPriceOrder} onValueChange={setSelectedPriceOrder}>
                                     <DropdownMenuRadioItem value="low-to-high">Low to High</DropdownMenuRadioItem>
                                     <DropdownMenuRadioItem value="high-to-low">High to Low</DropdownMenuRadioItem>
@@ -209,17 +227,14 @@ export default function CoursesPage() {
                         </DropdownMenu>
                     </div>
                     <div>
-                        <Label htmlFor="date" className="text-sm font-medium">
-                            Date
-                        </Label>
+                        <Label htmlFor="date">Date</Label>
                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full justify-between">
-                                    Date
-                                    <ChevronDownIcon className="h-4 w-4" />
-                                </Button>
+                            <DropdownMenuTrigger>
+                                <SelectTrigger>
+                                    <SelectValue>{selectedDateOrder ? `Date (${selectedDateOrder})` : 'Date'}</SelectValue>
+                                </SelectTrigger>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
+                            <DropdownMenuContent>
                                 <DropdownMenuRadioGroup value={selectedDateOrder} onValueChange={setSelectedDateOrder}>
                                     <DropdownMenuRadioItem value="newest">Newest</DropdownMenuRadioItem>
                                     <DropdownMenuRadioItem value="oldest">Oldest</DropdownMenuRadioItem>
@@ -227,12 +242,10 @@ export default function CoursesPage() {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
-                    <Button className="w-full" onClick={applyFilters}>Apply Filters</Button>
+                    <Button onClick={applyFilters}>Apply Filters</Button>
                 </div>
             </div>
-            <Suspense fallback={<div>Loading...</div>}>
-                <SearchComponent setCourses={setCourses} setFilteredCourses={setFilteredCourses} />
-            </Suspense>
+            <SearchComponent setCourses={setCourses} setFilteredCourses={setFilteredCourses} />
         </div>
     );
 }
