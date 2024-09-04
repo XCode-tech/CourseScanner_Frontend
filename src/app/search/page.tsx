@@ -1,119 +1,7 @@
-"use client";
+import { Suspense } from 'react';
+import { Spinner } from '@/components/ui/spinner'; // Import a spinner or loading component
 
-import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
-
-interface Course {
-    website: string;
-    brandname: string;
-    coursename: string;
-    duration: string;
-    price: number;
-    region: string;
-    start_date: string;
-    brand_image: string;
-    url: string;
-    course_id: string;
-}
-
-interface SearchComponentProps {
-    setCourses: React.Dispatch<React.SetStateAction<Course[]>>;
-    setFilteredCourses: React.Dispatch<React.SetStateAction<Course[]>>;
-}
-
-function ChevronDownIcon(props: React.SVGProps<SVGSVGElement>) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="m6 9 6 6 6-6" />
-        </svg>
-    );
-}
-
-function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProps) {
-    const BASE_URL = 'https://course-scanner-backend.vercel.app';
-    const searchParams = useSearchParams();
-
-    useEffect(() => {
-        async function fetchCourses() {
-            try {
-                if (!searchParams) {
-                    console.error('searchParams is null.');
-                    return;
-                }
-
-                const brandname = searchParams.get('brandname');
-                const course_id = searchParams.get('course_id');
-                const start_date = searchParams.get('start_date');
-                const region = searchParams.get('region');
-
-                if (!brandname || !course_id || !start_date || !region) {
-                    console.error('Required query parameters are missing.');
-                    return;
-                }
-
-                const searchParamsObj = {
-                    brandname,
-                    course_id,
-                    start_date,
-                    region
-                };
-                const searchUrl = `${BASE_URL}/search?${new URLSearchParams(searchParamsObj).toString()}`;
-
-                const response = await fetch(searchUrl);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch courses');
-                }
-                const rawData: any[] = await response.json();
-
-                const currentDate = new Date();
-                const extractedData: Course[] = rawData
-                    .map((course: any): Course => ({
-                        website: course.website,
-                        brandname: course.brandname,
-                        coursename: course.coursename,
-                        duration: course.duration,
-                        price: course.price,
-                        region: course.region,
-                        start_date: course.start_date,
-                        brand_image: course.brand_image,
-                        url: course.url,
-                        course_id: course.course_id
-                    }))
-                    .filter((course: Course) => new Date(course.start_date) >= currentDate);
-
-                setCourses(extractedData || []);
-                setFilteredCourses(extractedData || []);
-            } catch (error) {
-                console.error('Error fetching courses:', error);
-                setCourses([]);
-                setFilteredCourses([]);
-            }
-        }
-
-        if (searchParams && searchParams.toString()) {
-            fetchCourses();
-        }
-    }, [searchParams, setCourses, setFilteredCourses]);
-
-    return null;
-}
+import SearchComponent from './SearchComponent'; // Adjust the path if needed
 
 export default function CoursesPage() {
     const [courses, setCourses] = useState<Course[]>([]);
@@ -244,7 +132,9 @@ export default function CoursesPage() {
                     <Button onClick={applyFilters}>Apply Filters</Button>
                 </div>
             </div>
-            <SearchComponent setCourses={setCourses} setFilteredCourses={setFilteredCourses} />
+            <Suspense fallback={<Spinner />}>
+                <SearchComponent setCourses={setCourses} setFilteredCourses={setFilteredCourses} />
+            </Suspense>
         </div>
     );
 }
