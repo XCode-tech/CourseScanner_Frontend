@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
 
 interface Course {
@@ -82,10 +83,7 @@ function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProp
                 const rawData = await response.json();
 
                 const currentDate = new Date();
-
-                // Filter out past courses
                 const extractedData: Course[] = rawData
-                    .filter((course: any) => new Date(course.start_date) >= currentDate)
                     .map((course: any) => ({
                         website: course.website,
                         brandname: course.brandname,
@@ -97,7 +95,8 @@ function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProp
                         brand_image: course.brand_image,
                         url: course.url,
                         course_id: course.course_id
-                    }));
+                    }))
+                    .filter(course => new Date(course.start_date) >= currentDate);
 
                 setCourses(extractedData || []);
                 setFilteredCourses(extractedData || []);
@@ -123,12 +122,8 @@ export default function CoursesPage() {
     const [selectedDateOrder, setSelectedDateOrder] = useState<string | undefined>(undefined);
     const [selectedRegion, setSelectedRegion] = useState<string>('all');
 
-    const applyFilters = () => {
-        let filtered = [...courses];
-
-        // Ensure that past courses are filtered out before applying other filters
-        const currentDate = new Date();
-        filtered = filtered.filter(course => new Date(course.start_date) >= currentDate);
+    const applyFilters = useCallback(() => {
+        let filtered = courses.filter(course => new Date(course.start_date) >= new Date());
 
         if (selectedPriceOrder) {
             filtered.sort((a, b) => selectedPriceOrder === 'low-to-high' ? a.price - b.price : b.price - a.price);
@@ -141,7 +136,7 @@ export default function CoursesPage() {
         }
 
         setFilteredCourses(filtered);
-    };
+    }, [courses, selectedPriceOrder, selectedDateOrder, selectedRegion]);
 
     return (
         <div className="container mx-auto py-12 px-4 md:px-6 grid md:grid-cols-[1fr_300px] gap-8">
@@ -155,9 +150,9 @@ export default function CoursesPage() {
                                     <Image
                                         src={course.brand_image || '/bg.png'}
                                         alt={course.brandname || 'Course Image'}
-                                        width={500} // Replace with your desired width
-                                        height={300} // Replace with your desired height
-                                        objectFit="cover" // Adjust as needed, e.g., "contain", "fill", etc.
+                                        width={500}
+                                        height={300}
+                                        objectFit="cover"
                                     />
                                 </div>
                                 <div className="p-6">
@@ -177,48 +172,34 @@ export default function CoursesPage() {
                                         Company: {course.website}
                                     </p>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-2xl font-bold">${course.price.toFixed(2)}</span>
-                                        <Link href={course.url} passHref>
-                                            <Button>View Course</Button>
+                                        <span className="text-2xl font-bold">${course.price}</span>
+                                        <Link href={course.url} target="_blank" rel="noopener noreferrer">
+                                            <Button size="sm">Enroll</Button>
                                         </Link>
                                     </div>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <p>No courses available.</p>
+                        <p className="text-xl font-semibold text-gray-600">No courses available</p>
                     )}
                 </div>
             </div>
-            <div className="md:sticky top-0">
-                <h2 className="text-2xl font-bold mb-4">Filters</h2>
-                <div className="space-y-4">
+            <div className="bg-card rounded-lg shadow-md p-6">
+                <h2 className="text-xl font-bold mb-4">Filters</h2>
+                <div className="grid gap-4">
                     <div>
-                        <Label htmlFor="region">Region</Label>
+                        <Label htmlFor="price" className="text-sm font-medium">
+                            Price
+                        </Label>
                         <DropdownMenu>
-                            <DropdownMenuTrigger>
-                                <SelectTrigger>
-                                    <SelectValue>{selectedRegion}</SelectValue>
-                                </SelectTrigger>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full justify-between">
+                                    Price
+                                    <ChevronDownIcon className="h-4 w-4" />
+                                </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuRadioGroup value={selectedRegion} onValueChange={setSelectedRegion}>
-                                    <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
-                                    <DropdownMenuRadioItem value="UK">UK</DropdownMenuRadioItem>
-                                    <DropdownMenuRadioItem value="USA">USA</DropdownMenuRadioItem>
-                                </DropdownMenuRadioGroup>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
-                    <div>
-                        <Label htmlFor="price">Price</Label>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger>
-                                <SelectTrigger>
-                                    <SelectValue>{selectedPriceOrder ? `Price (${selectedPriceOrder})` : 'Price'}</SelectValue>
-                                </SelectTrigger>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
+                            <DropdownMenuContent align="end">
                                 <DropdownMenuRadioGroup value={selectedPriceOrder} onValueChange={setSelectedPriceOrder}>
                                     <DropdownMenuRadioItem value="low-to-high">Low to High</DropdownMenuRadioItem>
                                     <DropdownMenuRadioItem value="high-to-low">High to Low</DropdownMenuRadioItem>
@@ -227,20 +208,38 @@ export default function CoursesPage() {
                         </DropdownMenu>
                     </div>
                     <div>
-                        <Label htmlFor="date">Date</Label>
+                        <Label htmlFor="date" className="text-sm font-medium">
+                            Date
+                        </Label>
                         <DropdownMenu>
-                            <DropdownMenuTrigger>
-                                <SelectTrigger>
-                                    <SelectValue>{selectedDateOrder ? `Date (${selectedDateOrder})` : 'Date'}</SelectValue>
-                                </SelectTrigger>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full justify-between">
+                                    Date
+                                    <ChevronDownIcon className="h-4 w-4" />
+                                </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent>
+                            <DropdownMenuContent align="end">
                                 <DropdownMenuRadioGroup value={selectedDateOrder} onValueChange={setSelectedDateOrder}>
                                     <DropdownMenuRadioItem value="newest">Newest</DropdownMenuRadioItem>
                                     <DropdownMenuRadioItem value="oldest">Oldest</DropdownMenuRadioItem>
                                 </DropdownMenuRadioGroup>
                             </DropdownMenuContent>
                         </DropdownMenu>
+                    </div>
+                    <div>
+                        <Label htmlFor="region" className="text-sm font-medium">
+                            Region
+                        </Label>
+                        <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select Region" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">All</SelectItem>
+                                <SelectItem value="UK">UK</SelectItem>
+                                <SelectItem value="USA">USA</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <Button onClick={applyFilters}>Apply Filters</Button>
                 </div>
