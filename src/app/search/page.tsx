@@ -80,11 +80,11 @@ function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProp
                 if (!response.ok) {
                     throw new Error('Failed to fetch courses');
                 }
-                const rawData = await response.json();
+                const rawData: any[] = await response.json();
 
                 const currentDate = new Date();
                 const extractedData: Course[] = rawData
-                    .map((course: any) => ({
+                    .map((course: any): Course => ({
                         website: course.website,
                         brandname: course.brandname,
                         coursename: course.coursename,
@@ -96,7 +96,7 @@ function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProp
                         url: course.url,
                         course_id: course.course_id
                     }))
-                    .filter(course => new Date(course.start_date) >= currentDate);
+                    .filter((course: Course) => new Date(course.start_date) >= currentDate);
 
                 setCourses(extractedData || []);
                 setFilteredCourses(extractedData || []);
@@ -231,7 +231,7 @@ export default function CoursesPage() {
                             Region
                         </Label>
                         <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-                            <SelectTrigger className="w-full">
+                            <SelectTrigger>
                                 <SelectValue placeholder="Select Region" />
                             </SelectTrigger>
                             <SelectContent>
