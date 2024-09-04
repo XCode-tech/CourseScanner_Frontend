@@ -152,8 +152,9 @@ export default function CoursesPage() {
                                     />
                                 </div>
                                 <div className="p-6">
-#                                    <h2 className="text-xl font-bold mb-2">{course.coursename}</h2>
+{/* #                                    <h2 className="text-xl font-bold mb-2">{course.coursename}</h2> */}
                                     <h2 className="text-xl font-bold">{course.coursename.substring(0, course.coursename.indexOf('\n') + 1)}</h2>
+                                    <br />
                                     <p className="text-muted-foreground mb-4">
                                         Duration: {course.duration}
                                     </p>
