@@ -194,10 +194,10 @@ const CoursesPage = () => {
     // Get current date
     const currentDate = new Date();
 
-    // Filter for upcoming courses
+    // Filter for past courses (i.e., courses that have already started)
     filtered = filtered.filter(course => {
       const courseStartDate = new Date(course.start_date);
-      return !isNaN(courseStartDate.getTime()) && courseStartDate <= currentDate;
+      return !isNaN(courseStartDate.getTime()) && courseStartDate < currentDate;
     });
 
     // Apply sorting based on price and date
