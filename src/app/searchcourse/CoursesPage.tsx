@@ -89,11 +89,9 @@ const CourseList = ({
                     course.coursename}
                 </h2>
                 <br />
-                  <p className="text-muted-foreground mb-4">
-                    Duration: {course.duration ? course.duration : 'TBD'}
-                  </p>
-
-              
+                <p className="text-muted-foreground mb-4">
+                  Duration: {course.duration ? course.duration : 'TBD'}
+                </p>
                 {course.start_date && (
                   <p className="text-muted-foreground mb-4">
                     Start Date: {course.start_date}
@@ -193,6 +191,13 @@ const CoursesPage = () => {
   const applyFilters = useCallback((coursesToFilter: Course[]) => {
     let filtered = [...coursesToFilter];
 
+    // Get current date
+    const currentDate = new Date().toISOString().split('T')[0]; // Format: yyyy-mm-dd
+
+    // Filter out past courses
+    filtered = filtered.filter(course => new Date(course.start_date).toISOString().split('T')[0] >= currentDate);
+
+    // Apply sorting based on price and date
     if (selectedPriceOrder) {
       filtered.sort((a, b) => selectedPriceOrder === 'low-to-high' ? a.price - b.price : b.price - a.price);
     }
