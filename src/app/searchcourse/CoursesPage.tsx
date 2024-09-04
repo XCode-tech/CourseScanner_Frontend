@@ -193,10 +193,12 @@ const CoursesPage = () => {
 
     // Get current date
     const currentDate = new Date();
+    console.log("Current Date:", currentDate);
 
     // Filter for upcoming courses (i.e., courses that have not yet started)
     filtered = filtered.filter(course => {
       const courseStartDate = new Date(course.start_date);
+      console.log(`Course Start Date (${course.coursename}):`, courseStartDate);
       return !isNaN(courseStartDate.getTime()) && courseStartDate >= currentDate;
     });
 
