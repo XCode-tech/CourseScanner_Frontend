@@ -126,7 +126,7 @@ export default function CoursesPage() {
     const applyFilters = () => {
         let filtered = [...courses];
 
-        // Filter out past courses again just to be safe
+        // Ensure that past courses are filtered out before applying other filters
         const currentDate = new Date();
         filtered = filtered.filter(course => new Date(course.start_date) >= currentDate);
 
