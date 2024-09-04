@@ -220,6 +220,7 @@ const CoursesPage = () => {
       try {
         const response = await fetch(`${BASE_URL}/searchcourse?course_name=${encodeURIComponent(courseName)}`);
         const data = await response.json();
+        console.log('Fetched Courses Data:', data);
         setCourses(data);
         applyFilters(data);
       } catch (error) {
