@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect, Suspense } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
 
 interface Course {
@@ -81,22 +83,18 @@ function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProp
                 }
                 const rawData = await response.json();
 
-                const currentDate = new Date();
-
-                const extractedData: Course[] = rawData
-                    .map((course: any): Course => ({
-                        website: course.website,
-                        brandname: course.brandname,
-                        coursename: course.coursename,
-                        duration: course.duration,
-                        price: course.price,
-                        region: course.region,
-                        start_date: course.start_date,
-                        brand_image: course.brand_image,
-                        url: course.url,
-                        course_id: course.course_id
-                    }))
-                    .filter((course: Course) => new Date(course.start_date) >= currentDate); // Filter out past courses
+                const extractedData: Course[] = rawData.map((course: any) => ({
+                    website: course.website,
+                    brandname: course.brandname,
+                    coursename: course.coursename,
+                    duration: course.duration,
+                    price: course.price,
+                    region: course.region,
+                    start_date: course.start_date,
+                    brand_image: course.brand_image,
+                    url: course.url,
+                    course_id: course.course_id
+                }));
 
                 setCourses(extractedData || []);
                 setFilteredCourses(extractedData || []);
@@ -150,19 +148,27 @@ export default function CoursesPage() {
                                     <Image
                                         src={course.brand_image || '/bg.png'}
                                         alt={course.brandname || 'Course Image'}
-                                        width={500} 
-                                        height={300} 
-                                        objectFit="cover" 
+                                        width={500} // Replace with your desired width
+                                        height={300} // Replace with your desired height
+                                        objectFit="cover" // Adjust as needed, e.g., "contain", "fill", etc.
                                     />
                                 </div>
                                 <div className="p-6">
                                     <h2 className="text-xl font-bold mb-2">{course.coursename}</h2>
-                                    <p className="text-muted-foreground mb-4">
-                                        {course.duration && `Duration: ${course.duration}`}
-                                    </p>
-                                    <p className="text-muted-foreground mb-4">
-                                        {course.start_date && `Start Date: ${course.start_date}`}
-                                    </p>
+                                    <h2 className="text-xl font-bold">{course.coursename.substring(0, course.coursename.indexOf('\n') + 1)}</h2>
+                                        {course.duration && (
+                                          <p className="text-muted-foreground mb-4">
+                                            Duration: {course.duration}
+                                          </p>
+                                        )}
+                                      
+                                        {course.start_date && (
+                                          <p className="text-muted-foreground mb-4">
+                                            Start Date: {course.start_date}
+                                          </p>
+                                        )}
+                                    
+
                                     <p className="text-muted-foreground mb-4">
                                         Company: {course.website}
                                     </p>
