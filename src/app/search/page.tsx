@@ -83,18 +83,22 @@ function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProp
                 }
                 const rawData = await response.json();
 
-                const extractedData: Course[] = rawData.map((course: any) => ({
-                    website: course.website,
-                    brandname: course.brandname,
-                    coursename: course.coursename,
-                    duration: course.duration,
-                    price: course.price,
-                    region: course.region,
-                    start_date: course.start_date,
-                    brand_image: course.brand_image,
-                    url: course.url,
-                    course_id: course.course_id
-                }));
+                const currentDate = new Date();
+
+                const extractedData: Course[] = rawData
+                    .map((course: any) => ({
+                        website: course.website,
+                        brandname: course.brandname,
+                        coursename: course.coursename,
+                        duration: course.duration,
+                        price: course.price,
+                        region: course.region,
+                        start_date: course.start_date,
+                        brand_image: course.brand_image,
+                        url: course.url,
+                        course_id: course.course_id
+                    }))
+                    .filter(course => new Date(course.start_date) >= currentDate); // Filter out past courses
 
                 setCourses(extractedData || []);
                 setFilteredCourses(extractedData || []);
@@ -148,9 +152,9 @@ export default function CoursesPage() {
                                     <Image
                                         src={course.brand_image || '/bg.png'}
                                         alt={course.brandname || 'Course Image'}
-                                        width={500} // Replace with your desired width
-                                        height={300} // Replace with your desired height
-                                        objectFit="cover" // Adjust as needed, e.g., "contain", "fill", etc.
+                                        width={500}
+                                        height={300}
+                                        objectFit="cover"
                                     />
                                 </div>
                                 <div className="p-6">
