@@ -1,7 +1,115 @@
-import { Suspense } from 'react';
-import { Spinner } from '@/components/ui/spinner'; // Import a spinner or loading component
+"use client";
 
-import SearchComponent from './SearchComponent'; // Adjust the path if needed
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
+
+interface Course {
+    brandname: string;
+    coursename: string;
+    duration: string;
+    price: number;
+    region: string;
+    start_date: string;
+    brand_image: string;
+    url: string;
+    course_id: string;
+}
+
+interface SearchComponentProps {
+    setCourses: React.Dispatch<React.SetStateAction<Course[]>>;
+    setFilteredCourses: React.Dispatch<React.SetStateAction<Course[]>>;
+}
+
+function ChevronDownIcon(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg
+            {...props}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="m6 9 6 6 6-6" />
+        </svg>
+    );
+}
+
+function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProps) {
+    const BASE_URL = 'https://course-scanner-backend.vercel.app';
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        async function fetchCourses() {
+            try {
+                if (!searchParams) {
+                    console.error('searchParams is null.');
+                    return;
+                }
+
+                const brandname = searchParams.get('brandname');
+                const course_id = searchParams.get('course_id');
+                const start_date = searchParams.get('start_date');
+                const region = searchParams.get('region');
+
+                if (!brandname || !course_id || !start_date || !region) {
+                    console.error('Required query parameters are missing.');
+                    return;
+                }
+
+                const searchParamsObj = {
+                    brandname,
+                    course_id,
+                    start_date,
+                    region
+                };
+                const searchUrl = `${BASE_URL}/search?${new URLSearchParams(searchParamsObj).toString()}`;
+
+                const response = await fetch(searchUrl);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch courses');
+                }
+                const rawData = await response.json();
+
+                const extractedData: Course[] = rawData.map((course: any) => ({
+                    brandname: course.brandname,
+                    coursename: course.coursename,
+                    duration: course.duration,
+                    price: course.price,
+                    region: course.region,
+                    start_date: course.start_date,
+                    brand_image: course.brand_image,
+                    url: course.url,
+                    course_id: course.course_id
+                }));
+
+                setCourses(extractedData || []);
+                setFilteredCourses(extractedData || []);
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+                setCourses([]);
+                setFilteredCourses([]);
+            }
+        }
+
+        if (searchParams && searchParams.toString()) {
+            fetchCourses();
+        }
+    }, [searchParams, setCourses, setFilteredCourses]);
+
+    return null;
+}
 
 export default function CoursesPage() {
     const [courses, setCourses] = useState<Course[]>([]);
@@ -10,8 +118,8 @@ export default function CoursesPage() {
     const [selectedDateOrder, setSelectedDateOrder] = useState<string | undefined>(undefined);
     const [selectedRegion, setSelectedRegion] = useState<string>('all');
 
-    const applyFilters = useCallback(() => {
-        let filtered = courses.filter(course => new Date(course.start_date) >= new Date());
+    const applyFilters = () => {
+        let filtered = [...courses];
 
         if (selectedPriceOrder) {
             filtered.sort((a, b) => selectedPriceOrder === 'low-to-high' ? a.price - b.price : b.price - a.price);
@@ -24,7 +132,7 @@ export default function CoursesPage() {
         }
 
         setFilteredCourses(filtered);
-    }, [courses, selectedPriceOrder, selectedDateOrder, selectedRegion]);
+    };
 
     return (
         <div className="container mx-auto py-12 px-4 md:px-6 grid md:grid-cols-[1fr_300px] gap-8">
@@ -38,26 +146,22 @@ export default function CoursesPage() {
                                     <Image
                                         src={course.brand_image || '/bg.png'}
                                         alt={course.brandname || 'Course Image'}
-                                        width={500}
-                                        height={300}
-                                        objectFit="cover"
+                                        width={500} // Replace with your desired width
+                                        height={300} // Replace with your desired height
+                                        objectFit="cover" // Adjust as needed, e.g., "contain", "fill", etc.
                                     />
                                 </div>
                                 <div className="p-6">
-                                    <h2 className="text-xl font-bold mb-2">{course.coursename}</h2>
+#                                    <h2 className="text-xl font-bold mb-2">{course.coursename}</h2>
                                     <h2 className="text-xl font-bold">{course.coursename.substring(0, course.coursename.indexOf('\n') + 1)}</h2>
-                                    {course.duration && (
-                                        <p className="text-muted-foreground mb-4">
-                                            Duration: {course.duration}
-                                        </p>
-                                    )}
-                                    {course.start_date && (
-                                        <p className="text-muted-foreground mb-4">
-                                            Start Date: {course.start_date}
-                                        </p>
-                                    )}
                                     <p className="text-muted-foreground mb-4">
-                                        Company: {course.website}
+                                        Duration: {course.duration}
+                                    </p>
+                                    <p className="text-muted-foreground mb-4">
+                                        Start Date: {course.start_date}
+                                    </p>
+                                    <p className="text-muted-foreground mb-4">
+                                        Company: {course.duration}
                                     </p>
                                     <div className="flex items-center justify-between">
                                         <span className="text-2xl font-bold">${course.price}</span>
@@ -114,25 +218,10 @@ export default function CoursesPage() {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
-                    <div>
-                        <Label htmlFor="region" className="text-sm font-medium">
-                            Region
-                        </Label>
-                        <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select Region" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">All</SelectItem>
-                                <SelectItem value="UK">UK</SelectItem>
-                                <SelectItem value="USA">USA</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <Button onClick={applyFilters}>Apply Filters</Button>
+                    <Button className="w-full" onClick={applyFilters}>Apply Filters</Button>
                 </div>
             </div>
-            <Suspense fallback={<Spinner />}>
+            <Suspense fallback={<div>Loading...</div>}>
                 <SearchComponent setCourses={setCourses} setFilteredCourses={setFilteredCourses} />
             </Suspense>
         </div>
