@@ -195,7 +195,10 @@ const CoursesPage = () => {
     const currentDate = new Date().toISOString().split('T')[0]; // Format: yyyy-mm-dd
 
     // Filter out past courses
-    filtered = filtered.filter(course => new Date(course.start_date).toISOString().split('T')[0] >= currentDate);
+    filtered = filtered.filter(course => {
+      const courseStartDate = new Date(course.start_date);
+      return !isNaN(courseStartDate.getTime()) && courseStartDate.toISOString().split('T')[0] >= currentDate;
+    });
 
     // Apply sorting based on price and date
     if (selectedPriceOrder) {
