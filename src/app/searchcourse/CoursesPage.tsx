@@ -1,4 +1,3 @@
-// src/app/searchcourse/CoursesPage.tsx
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
@@ -79,11 +78,13 @@ const CourseList = ({
                   alt={course.brandname || 'Course Image'}
                   width={500}
                   height={300}
-                  objectFit="cover"
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
               <div className="p-6">
-                <h2 className="text-xl font-bold">{course.coursename.substring(0, course.coursename.indexOf('\n') + 1)}</h2>
+                <h2 className="text-xl font-bold">
+                  {course.coursename.split('\n')[0]}
+                </h2>
                 <p className="text-muted-foreground mb-4">
                   Duration: {course.duration}
                 </p>
@@ -194,7 +195,7 @@ const CoursesPage = () => {
       filtered = filtered.filter(course => course.region === selectedRegion);
     }
     setFilteredCourses(filtered);
-  }, [courses, selectedPriceOrder, selectedDateOrder, selectedRegion]);
+  }, [selectedPriceOrder, selectedDateOrder, selectedRegion]);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -208,7 +209,7 @@ const CoursesPage = () => {
       }
     };
     fetchCourses();
-  }, [courseName, BASE_URL, applyFilters]);
+  }, [courseName, applyFilters]);
 
   const handleFilterChange = () => {
     applyFilters(courses);
@@ -233,6 +234,6 @@ const CoursesPage = () => {
       />
     </div>
   );
-};
+}
 
 export default CoursesPage;
