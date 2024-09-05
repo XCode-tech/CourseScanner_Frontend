@@ -83,20 +83,13 @@ const CourseList = ({
                 />
               </div>
               <div className="p-6">
-                <h2 className="text-xl font-bold">
-                  {course.coursename.indexOf('\n') !== -1 ? 
-                    course.coursename.substring(0, course.coursename.indexOf('\n') + 1) : 
-                    course.coursename}
-                </h2>
-                <br />
+                <h2 className="text-xl font-bold">{course.coursename.substring(0, course.coursename.indexOf('\n') + 1)}</h2>
                 <p className="text-muted-foreground mb-4">
-                  Duration: {course.duration ? course.duration : 'TBD'}
+                  Duration: {course.duration}
                 </p>
-                {course.start_date && (
-                  <p className="text-muted-foreground mb-4">
-                    Start Date: {course.start_date}
-                  </p>
-                )}
+                <p className="text-muted-foreground mb-4">
+                  Start Date: {course.start_date}
+                </p>
                 <p className="text-muted-foreground mb-4">
                   Company: {course.website}
                 </p>
@@ -191,18 +184,6 @@ const CoursesPage = () => {
   const applyFilters = useCallback((coursesToFilter: Course[]) => {
     let filtered = [...coursesToFilter];
 
-    // Get current date
-    const currentDate = new Date();
-    console.log("Current Date:", currentDate);
-
-    // Filter for upcoming courses (i.e., courses that have not yet started)
-    filtered = filtered.filter(course => {
-      const courseStartDate = new Date(course.start_date);
-      console.log(`Course Start Date (${course.coursename}):`, courseStartDate);
-      return !isNaN(courseStartDate.getTime()) && courseStartDate > currentDate;
-    });
-
-    // Apply sorting based on price and date
     if (selectedPriceOrder) {
       filtered.sort((a, b) => selectedPriceOrder === 'low-to-high' ? a.price - b.price : b.price - a.price);
     }
@@ -220,7 +201,6 @@ const CoursesPage = () => {
       try {
         const response = await fetch(`${BASE_URL}/searchcourse?course_name=${encodeURIComponent(courseName)}`);
         const data = await response.json();
-        console.log('Fetched Courses Data:', data);
         setCourses(data);
         applyFilters(data);
       } catch (error) {
@@ -256,4 +236,3 @@ const CoursesPage = () => {
 };
 
 export default CoursesPage;
-
