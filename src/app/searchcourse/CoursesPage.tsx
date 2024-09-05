@@ -199,7 +199,7 @@ const CoursesPage = () => {
     filtered = filtered.filter(course => {
       const courseStartDate = new Date(course.start_date);
       console.log(`Course Start Date (${course.coursename}):`, courseStartDate);
-      return !isNaN(courseStartDate.getTime()) && courseStartDate <= currentDate;
+      return !isNaN(courseStartDate.getTime()) && courseStartDate > currentDate;
     });
 
     // Apply sorting based on price and date
