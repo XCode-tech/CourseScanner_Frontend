@@ -85,6 +85,7 @@ const CourseList = ({
                 <h2 className="text-xl font-bold">
                   {course.coursename.split('\n')[0]}
                 </h2>
+                <br />
                 <p className="text-muted-foreground mb-4">
                   Duration: {course.duration ? course.duration : 'TBD'}
                 </p>
