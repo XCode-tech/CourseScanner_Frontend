@@ -86,11 +86,12 @@ const CourseList = ({
                   {course.coursename.split('\n')[0]}
                 </h2>
                 <p className="text-muted-foreground mb-4">
-                  Duration: {course.duration}
+                  Duration: {course.duration ? course.duration : 'TBD'}
                 </p>
                 <p className="text-muted-foreground mb-4">
-                  Start Date: {course.start_date}
+                  Start Date: {course.start_date ? course.start_date : 'TBD'}
                 </p>
+
                 <p className="text-muted-foreground mb-4">
                   Company: {course.website}
                 </p>
