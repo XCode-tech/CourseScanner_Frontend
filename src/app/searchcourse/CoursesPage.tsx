@@ -118,6 +118,8 @@ const CourseList = ({
         )}
       </div>
     </div>
+  </>
+
   );
 }
 
@@ -179,7 +181,7 @@ const Filters = ({
         <Button className="w-full" onClick={handleFilterChange}>Apply Filters</Button>
       </div>
     </div>
-  </>
+
       
   );
 }
