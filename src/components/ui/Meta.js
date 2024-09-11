@@ -1,7 +1,7 @@
 
 import Head from 'next/head';
 
-export default function Meta({ title, description, keywords, imageUrl, pageUrl }) {
+export default function Meta({ title, description, keywords, pageUrl }) {
   return (
     <Head>
       <meta charSet="UTF-8" />
