@@ -165,37 +165,12 @@ export function Component() {
 
     return (
     <>
-          <Head>
-        {/* Primary Meta Tags for SEO */}
-        <meta charSet="UTF-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Explore certification courses including PMP, AWS, CEH, CISA, CISSP, ITIL, and more. Find detailed information on certification costs, exam fees, and online training options to advance your IT career." />
-        <meta name="keywords" content="PMP certification cost, ethical hacking course, AWS course, AZ-900, CEH course, PMP certification fees, CISA certification, CISSP exam fee, ITIL v4 certification, Azure DevOps certification, TOGAF certification cost, Android development course" />
-        <meta name="author" content="Your Company Name" />
-        <meta name="robots" content="index, follow" />
-        <meta name="google-site-verification" content="your-google-verification-code" />
-
-        {/* Title */}
-        <title>Top IT Certifications: PMP, AWS, CEH, CISA, CISSP - Costs, Courses & Exams</title>
-
-        {/* Open Graph Meta Tags (for social media sharing) */}
-        <meta property="og:title" content="Explore Top IT Certifications: PMP, AWS, CEH, CISA, CISSP & More" />
-        <meta property="og:description" content="Find details on certification costs, exam fees, and training courses for PMP, AWS, CEH, CISA, CISSP, ITIL, and more." />
-        <meta property="og:image" content="https://yourwebsite.com/certifications.jpg" />
-        <meta property="og:url" content="https://yourwebsite.com/certifications" />
-        <meta property="og:type" content="website" />
-
-        {/* Twitter Card Meta Tags (for better presentation on Twitter) */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="PMP, AWS, Ethical Hacking, Azure, ITIL Certifications - Costs & Courses" />
-        <meta name="twitter:description" content="Learn about top certifications like PMP, AWS, CEH, CISA, and CISSP. Get detailed info on course fees, exam costs, and training." />
-        <meta name="twitter:image" content="https://yourwebsite.com/certifications.jpg" />
-
-        {/* Canonical Tag */}
-        <link rel="canonical" href="https://coursescanner.ai/" />
-      </Head>
-
+       <Meta
+        title="Home | Top IT Certifications: PMP, AWS, CEH, CISA"
+        description="Explore the best certification courses like PMP, AWS, CEH, and CISA to boost your IT career."
+        keywords="PMP certification, AWS course, CEH course, CISA certification"
+        pageUrl="https://coursescanner.ai/"
+      />
         <div className="flex flex-col min-h-screen mt-10 bg-black">
             <main className="flex-1">
                 <section className="">
