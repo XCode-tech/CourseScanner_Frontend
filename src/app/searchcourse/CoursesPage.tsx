@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
+import Meta from '@/components/ui/Meta';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -66,6 +67,13 @@ const CourseList = ({
   }, [selectedPriceOrder, selectedDateOrder, selectedRegion, courses, applyFilters]);
 
   return (
+    <>
+    <Meta
+        title="Search IT Certifications | Find PMP, AWS, CEH, CISA, CISSP Courses"
+        description="Search and explore top certification courses like PMP, AWS, CEH, CISA, and CISSP. Find detailed information on costs, exams, and training options."
+        keywords="search IT certifications, PMP course, AWS certification, CEH course, CISA certification, CISSP training"
+        pageUrl="https://coursescanner.ai/searchcourse"
+      />
     <div className="ml-[10%] bg-black">
       <h1 className="text-3xl font-bold mb-8">All Searched Courses</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
@@ -171,6 +179,8 @@ const Filters = ({
         <Button className="w-full" onClick={handleFilterChange}>Apply Filters</Button>
       </div>
     </div>
+  </>
+      
   );
 }
 
