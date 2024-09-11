@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from 'react';
+import Meta from '../components/ui/Meta';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -137,6 +138,15 @@ export default function CoursesPage() {
     };
 
     return (
+    <>
+      <Meta
+        title="Search IT Certifications | Find PMP, AWS, CEH, CISA, CISSP Courses"
+        description="Search and explore top certification courses like PMP, AWS, CEH, CISA, and CISSP. Find detailed information on costs, exams, and training options."
+        keywords="search IT certifications, PMP course, AWS certification, CEH course, CISA certification, CISSP training"
+        pageUrl="https://coursescanner.ai/search"
+      />
+
+        
         <div className="container mx-auto py-12 px-4 md:px-6 grid md:grid-cols-[1fr_300px] gap-8">
             <div className="ml-[10%]">
                 <h1 className="text-3xl font-bold mb-8">All Courses</h1>
@@ -154,7 +164,6 @@ export default function CoursesPage() {
                                     />
                                 </div>
                                 <div className="p-6">
-{/* #                                    <h2 className="text-xl font-bold mb-2">{course.coursename}</h2> */}
                                     <h2 className="text-xl font-bold">{course.coursename.substring(0, course.coursename.indexOf('\n') + 1)}</h2>
                                     <br />
                                     <p className="text-muted-foreground mb-4">
@@ -228,5 +237,6 @@ export default function CoursesPage() {
                 <SearchComponent setCourses={setCourses} setFilteredCourses={setFilteredCourses} />
             </Suspense>
         </div>
+    </>
     );
 }
