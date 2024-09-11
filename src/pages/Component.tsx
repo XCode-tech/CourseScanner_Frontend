@@ -1,6 +1,7 @@
 "use client";
 
 import Image from 'next/image';
+import Head from 'next/head';
 import React, { useEffect, useState, MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
