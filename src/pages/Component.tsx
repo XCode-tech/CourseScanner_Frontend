@@ -193,10 +193,7 @@ export function Component() {
         <meta name="twitter:image" content="https://yourwebsite.com/certifications.jpg" />
 
         {/* Canonical Tag */}
-        <link rel="canonical" href="https://yourwebsite.com/certifications" />
-
-        {/* Favicon */}
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="canonical" href="https://coursescanner.ai/" />
       </Head>
 
         <div className="flex flex-col min-h-screen mt-10 bg-black">
