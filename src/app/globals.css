@@ -26,13 +26,12 @@ body {
     rgb(var(--background-start-rgb));
 }
 
-
 @layer utilities {
   .text-balance {
-    text-wrap: balance;
+    text-align: justify; /* Assuming you want text to be justified */
+    text-align-last: center; /* Adjusts the alignment of the last line of text */
   }
 }
-
 
 /* styles/custom.css */
 .box {
@@ -50,5 +49,3 @@ body {
   background: white;
   border-radius: 20px;
 }
-
-
