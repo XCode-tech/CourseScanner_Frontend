@@ -1,5 +1,6 @@
 "use client";
 
+import Meta from '../components/ui/Meta';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
@@ -57,6 +58,13 @@ export default function Component() {
     };
 
     return (
+    <>
+      <Meta
+        title="Contact Us | Get in Touch with Our IT Certification Experts"
+        description="Have questions about PMP, AWS, CEH, CISA, or other certifications? Contact us for detailed information and guidance."
+        keywords="contact us, PMP certification, AWS course, CEH course, CISA certification, IT certifications"
+        pageUrl="https://coursescanner.ai/contact_us"
+      />
         <div className="container mx-auto max-w-3xl px-4 py-12 md:px-6 md:py-16 text-white">
             <div className="space-y-6">
                 <div className="text-center">
@@ -100,5 +108,6 @@ export default function Component() {
                 </form>
             </div>
         </div>
+    </>
     );
 }
