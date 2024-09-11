@@ -1,10 +1,10 @@
-// layout.tsx
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
-
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-black">
       <body className={inter.className}>
+        <GoogleAnalytics /> {/* Add this line */}
         <Navbar />
         {children}
         <Footer />
