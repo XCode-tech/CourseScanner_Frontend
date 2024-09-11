@@ -27,6 +27,16 @@ export default function Meta({ title, description, keywords, pageUrl }) {
 
       <link rel="canonical" href={pageUrl} />
 
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-N7E2FM9SLM"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+      
+        gtag('config', 'G-N7E2FM9SLM');
+      </script>
+
     </Head>
   );
 }
