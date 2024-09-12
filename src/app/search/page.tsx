@@ -53,6 +53,11 @@ function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProp
     useEffect(() => {
         async function fetchCourses() {
             try {
+                if (!searchParams) {
+                    console.error('No search parameters provided.');
+                    return;
+                }
+
                 const brandname = searchParams.get('brandname');
                 const course_id = searchParams.get('course_id');
                 const start_date = searchParams.get('start_date');
@@ -94,7 +99,7 @@ function SearchComponent({ setCourses, setFilteredCourses }: SearchComponentProp
             }
         }
 
-        if (searchParams.toString()) {
+        if (searchParams) {
             fetchCourses();
         }
     }, [searchParams, setCourses, setFilteredCourses]);
