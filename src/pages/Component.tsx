@@ -9,6 +9,7 @@ import Link from "next/link";
 import { CardContent } from "@/components/ui/card";
 import { Card } from "@/components/ui/card";
 
+// Define Course type/interface
 interface Course {
     course_id: string;
     coursename: string;
@@ -18,25 +19,25 @@ interface Course {
     duration: string;
     start_date: string;
     url: string;
+    // Add other properties as per your actual data structure
 }
 
+// Define the type for the data returned from API
 interface BrandName {
     brandname: string;
+    // Add other properties if present in your actual API response
 }
 
-export function Component() {
+const Component: React.FC = () => {
     const BASE_URL = 'https://course-scanner-backend.vercel.app';
-    const [selectedCourseId, setSelectedCourseId] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [showPopup, setShowPopup] = useState(false);
+    const [selectedCourseId, setSelectedCourseId] = useState<string>('');
+    const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [showPopup, setShowPopup] = useState<boolean>(false);
     const router = useRouter();
     const [brandNames, setBrandNames] = useState<string[]>([]);
     const [selectedBrandName, setSelectedBrandName] = useState<string>('');
     const [courseNames, setCourseNames] = useState<Course[]>([]);
-    const [today, setToday] = useState('');
-    const [courseName, setCourseName] = useState('');
-    const [courses, setCourses] = useState([]);
-    const [error, setError] = useState('');
+    const [today, setToday] = useState<string>('');
 
     useEffect(() => {
         fetch(`${BASE_URL}/brandnames`)
@@ -52,8 +53,8 @@ export function Component() {
                 .then((data: Course[]) => {
                     const uniqueCourses = Array.from(new Set(data.map((item: Course) => item.coursename)))
                         .map(name => data.find(course => course.coursename === name))
-                        .filter((course): course is Course => course !== undefined);
-                    
+                        .filter((course): course is Course => course !== undefined); 
+
                     const sortedCourses = uniqueCourses.sort((a, b) => {
                         return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
                     });
@@ -73,7 +74,14 @@ export function Component() {
 
     const topCourses = [
         { coursename: 'Designing and Implementing a Microsoft Azure AI Solution (AI-102T00)', brandname: 'Microsoft', region: 'USA', url: '/searchcourse?course_name=AI-102T00' },
-        // other courses...
+        { coursename: 'CompTIA Security+', brandname: 'CompTIA', region: 'USA', url: '/searchcourse?course_name=CompTIA Security+' },
+        { coursename: 'Engineering Cisco Meraki Solutions', brandname: 'Cisco', region: 'USA', url: '/searchcourse?course_name=Engineering Cisco Meraki Solutions' },
+        { coursename: 'Practical Data Science with Amazon SageMaker', brandname: 'Aws', region: 'USA', url: '/searchcourse?course_name=Amazon SageMaker' },
+        { coursename: 'AWS Cloud Practitioner Essentials', brandname: 'Aws', region: 'USA', url: '/searchcourse?course_name=AWS Cloud Practitioner Essentials' },
+        { coursename: 'Certified Ethical Hacker (CEH) v12', brandname: 'EC-Council', region: 'USA', url: '/searchcourse?course_name=CEH' },
+        { coursename: 'Designing and Implementing a Microsoft Azure AI Solution', brandname: 'Microsoft', region: 'USA', url: '/searchcourse?course_name=Designing and Implementing a Microsoft Azure AI Solution' },
+        { coursename: 'Implementing Automation for Cisco Enterprise Solutions', brandname: 'Cisco', region: 'USA', url: '/searchcourse?course_name=Implementing Automation for Cisco Enterprise Solutions' },
+        { coursename: 'Data Engineering on Microsoft Azure (DP-203T00)', brandname: 'Microsoft', region: 'USA', url: '/searchcourse?course_name=Data Engineering on Microsoft Azure (DP-203T00)' },
     ];
 
     const handleLinkClick = async (e: MouseEvent<HTMLButtonElement>, courseName: string) => {
@@ -83,7 +91,7 @@ export function Component() {
 
     const handleBrandNameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedBrandName(event.target.value);
-        setSelectedCourseId('');
+        setSelectedCourseId(''); 
     };
 
     const capitalize = (str: string): string => {
@@ -114,13 +122,15 @@ export function Component() {
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
             setSearchResults(data);
-            setShowPopup(data.length === 0);
-            if (data.length > 0) {
+            if (data.length === 0) {
+                setShowPopup(true); 
+            } else {
+                setShowPopup(false);
                 router.push(`/search?${queryString}`);
             }
         } catch (error) {
             console.error('Error fetching search results:', error);
-            setShowPopup(true);
+            setShowPopup(true); 
         }
     };
 
@@ -132,18 +142,16 @@ export function Component() {
                 keywords="PMP certification, AWS course, CEH course, CISA certification"
                 pageUrl="https://coursescanner.ai/"
             />
-            <div className="flex flex-col min-h-screen mt-10 bg-white dark:bg-black text-black dark:text-white">
+            <div className="flex flex-col min-h-screen mt-10 bg-black">
                 <main className="flex-1">
-                    <section className="p-4">
-                        <div className="container mx-auto">
-                            <h1 className="text-3xl md:text-6xl font-bold mb-4 text-center">
-                                Helping You Find the <span className="text-yellow-500">Best Course</span>
+                    <section>
+                        <div>
+                            <h1 className="text-3xl md:text-6xl font-bold mb-4 text-center text-white">
+                                Helping You Find the <span className="text-[#ddbd48]">Best Course</span>
                             </h1>
-
-                            <p className="text-lg md:text-xl mb-8 text-center">Compare course prices across multiple websites and find the best deal.</p>
-
-                            <div className="p-4">
-                                <form className="flex flex-col md:flex-row bg-gray-100 dark:bg-gray-800 p-4 rounded space-y-4 md:space-y-0" onSubmit={handleSubmit}>
+                            <p className="text-lg md:text-xl text-white-600 mb-8 text-center text-white">Compare course prices across multiple websites and find the best deal.</p>
+                            <div className="text-white p-12">
+                                <form className="mt-4 flex flex-col md:flex-row bg-white justify-between p-4 text-black rounded space-y-4 md:space-y-0" onSubmit={handleSubmit}>
                                     <div className="flex flex-col w-full md:w-1/5">
                                         <label htmlFor="brand-name" className="text-sm font-bold">Brand Name</label>
                                         <select
@@ -151,7 +159,7 @@ export function Component() {
                                             name="brand-name"
                                             value={selectedBrandName}
                                             onChange={handleBrandNameChange}
-                                            className="w-full bg-gray-200 dark:bg-gray-700 text-black dark:text-white focus:outline-none"
+                                            className="w-full bg-transparent focus:outline-none"
                                             autoComplete="brand-name"
                                         >
                                             <option value="">Select Brand Name</option>
@@ -162,66 +170,65 @@ export function Component() {
                                             ))}
                                         </select>
                                     </div>
-                                    <div className="border-l border-gray-300 dark:border-gray-600 mx-4 hidden md:block"></div>
+                                    <div className="border-l border-gray-300 mx-4 hidden md:block"></div>
                                     <div className="flex flex-col w-full md:w-1/5">
                                         <label htmlFor="course-id" className="text-sm font-bold">Course Name</label>
-                                        <select id="course-id" name="course-id" value={selectedCourseId} onChange={handleCourseNameChange} className="w-full bg-gray-200 dark:bg-gray-700 text-black dark:text-white focus:outline-none" autoComplete="course-id">
+                                        <select id="course-id" name="course-id" value={selectedCourseId} onChange={handleCourseNameChange} className="w-full bg-transparent focus:outline-none" autoComplete="course-id">
                                             <option value="">Select Course Name</option>
                                             {courseNames.map((course, index) => (
                                                 <option key={index} value={course.course_id}>
-                                                    {course.coursename || 'No Course Name'}
+                                                    {course.coursename && course.coursename.includes('\n')
+                                                        ? course.coursename.split('\n')[0] // Adjusted to handle course names with newline
+                                                        : course.coursename}
                                                 </option>
                                             ))}
                                         </select>
                                     </div>
-                                    <div className="border-l border-gray-300 dark:border-gray-600 mx-4 hidden md:block"></div>
+                                    <div className="border-l border-gray-300 mx-4 hidden md:block"></div>
                                     <div className="flex flex-col w-full md:w-1/5">
-                                        <label htmlFor="start_date" className="text-sm font-bold">Start Date</label>
+                                        <label htmlFor="start-date" className="text-sm font-bold">Start Date</label>
                                         <input
                                             type="date"
-                                            id="start_date"
+                                            id="start-date"
                                             name="start_date"
-                                            className="w-full bg-gray-200 dark:bg-gray-700 text-black dark:text-white focus:outline-none"
-                                            autoComplete="start_date"
+                                            className="w-full border border-gray-300 rounded p-2"
+                                            required
                                         />
                                     </div>
-                                    <div className="border-l border-gray-300 dark:border-gray-600 mx-4 hidden md:block"></div>
+                                    <div className="border-l border-gray-300 mx-4 hidden md:block"></div>
                                     <div className="flex flex-col w-full md:w-1/5">
                                         <label htmlFor="region" className="text-sm font-bold">Region</label>
-                                        <select id="region" name="region" className="w-full bg-gray-200 dark:bg-gray-700 text-black dark:text-white focus:outline-none" autoComplete="region">
-                                            <option value="">Select Region</option>
+                                        <select id="region" name="region" className="w-full bg-transparent focus:outline-none" autoComplete="region">
+                                            <option value="">All</option>
                                             <option value="UK">UK</option>
                                             <option value="USA">USA</option>
-                                            <option value="All">All</option>
                                         </select>
                                     </div>
-                                    <button type="submit" className="w-full md:w-1/5 bg-blue-500 dark:bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-600 dark:hover:bg-blue-800 focus:outline-none">Search</button>
+                                    <button type="submit" className="bg-black text-white py-2 px-4 rounded">Search</button>
                                 </form>
                             </div>
-
                             {showPopup && (
-                                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                                    <div className="bg-white dark:bg-gray-800 text-black dark:text-white p-6 rounded-lg">
-                                        <h2 className="text-xl font-bold mb-4">No Data Found</h2>
-                                        <p className="mb-4">No courses match your search criteria.</p>
-                                        <button onClick={() => setShowPopup(false)} className="bg-blue-500 dark:bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-600 dark:hover:bg-blue-800 focus:outline-none">Close</button>
-                                    </div>
+                                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded shadow-lg z-50">
+                                    <h2 className="text-xl font-bold">No data found</h2>
+                                    <p className="mt-2">No results match your search criteria.</p>
+                                    <button className="mt-4 bg-black text-white px-4 py-2 rounded" onClick={() => setShowPopup(false)}>Close</button>
                                 </div>
                             )}
-
-                            <div className="flex flex-col md:flex-row justify-center mt-10 space-y-4 md:space-y-0 md:space-x-4">
-                                {topCourses.map((course, index) => (
-                                    <Card key={index} className="w-full md:w-1/4">
-                                        <CardContent>
-                                            <h2 className="text-xl font-bold mb-2">{course.coursename}</h2>
-                                            <p className="text-lg mb-2">Brand: {course.brandname}</p>
-                                            <p className="text-lg mb-2">Region: {course.region}</p>
-                                            <Link href={course.url} passHref>
-                                                <a className="text-blue-500 dark:text-blue-300 hover:underline">View Course</a>
-                                            </Link>
-                                        </CardContent>
-                                    </Card>
-                                ))}
+                            <div className="text-white mt-10">
+                                <h2 className="text-2xl font-bold mb-4 text-center">Top Popular Courses</h2>
+                                <div className="flex flex-wrap justify-center">
+                                    {topCourses.map((course, index) => (
+                                        <Card key={index} className="m-4 p-4 bg-gray-800 text-white">
+                                            <CardContent>
+                                                <h3 className="text-xl font-bold mb-2">{course.coursename}</h3>
+                                                <p className="text-sm mb-2">{course.brandname}</p>
+                                                <Link href={course.url}>
+                                                    <a className="text-blue-500 hover:underline">More Details</a>
+                                                </Link>
+                                            </CardContent>
+                                        </Card>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -229,4 +236,6 @@ export function Component() {
             </div>
         </>
     );
-}
+};
+
+export default Component;
