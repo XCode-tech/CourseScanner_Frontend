@@ -50,7 +50,7 @@ export function Component() {
 
 
     useEffect(() => {
-        fetch(${BASE_URL}/brandnames)
+        fetch(`${BASE_URL}/brandnames`)
             .then(response => response.json())
             .then((data: BrandName[]) => setBrandNames(data.map(item => item.brandname)))
             .catch(error => console.error('Error fetching brand names:', error));
@@ -60,7 +60,7 @@ export function Component() {
     useEffect(() => {
         // Fetch course names based on selected brand name
         if (selectedBrandName) {
-            fetch(${BASE_URL}/coursename/${selectedBrandName})
+            fetch(`${BASE_URL}/coursename/${selectedBrandName}`)
                 .then(response => response.json())
                 .then((data: Course[]) => {
                     const uniqueCourses = Array.from(new Set(data.map((item: Course) => item.coursename)))
@@ -109,7 +109,7 @@ export function Component() {
     const handleLinkClick = async (e: MouseEvent<HTMLButtonElement>, courseName: string) => {
         e.preventDefault();
         // Redirect to the search page with the course name as a query parameter
-        await router.push(/searchcourse?course_name=${encodeURIComponent(courseName)});
+        await router.push(`/searchcourse?course_name=${encodeURIComponent(courseName)}`);
     };
 
 
@@ -143,7 +143,7 @@ export function Component() {
         };
 
         const queryString = new URLSearchParams(formData as Record<string, string>).toString();
-        const url = ${BASE_URL}/search?${queryString};
+        const url = `${BASE_URL}/search?${queryString}`;
 
         try {
             const response = await fetch(url);
@@ -154,7 +154,7 @@ export function Component() {
                 setShowPopup(true); // Show popup for no data found
             } else {
                 setShowPopup(false);
-                router.push(/search?${queryString});
+                router.push(`/search?${queryString}`);
             }
         } catch (error) {
             console.error('Error fetching search results:', error);
@@ -303,8 +303,8 @@ export function Component() {
                                     <Card className="h-full flex flex-col justify-between">
                                         <CardContent className="mt-5 flex flex-col flex-grow">
                                             <Image
-                                                src={/brands/${course.brandname.toLowerCase()}.png}
-                                                alt={${course.brandname} logo}
+                                                src={`/brands/${course.brandname.toLowerCase()}.png`}
+                                                alt={`${course.brandname} logo`}
                                                 width={200}
                                                 height={100}
                                                 className="mx-auto"
