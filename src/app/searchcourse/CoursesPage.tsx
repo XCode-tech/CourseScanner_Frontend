@@ -74,7 +74,7 @@ const CourseList = ({
         keywords="search IT certifications, PMP course, AWS certification, CEH course, CISA certification, CISSP training"
         pageUrl="https://coursescanner.ai/searchcourse"
       />
-      <div className="ml-[10%] bg-gray-100 dark:bg-gray-900 p-4 text-gray-900 dark:text-white">
+      <div className="ml-[10%] bg-gray bg-gray-100 dark:bg-gray-900 p-4 text-gray-900 dark:text-white">
         <h1 className="text-3xl font-bold mb-8">All Searched Courses</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
           {filteredCourses.length > 0 ? (
@@ -136,7 +136,7 @@ const Filters = ({
   handleFilterChange: () => void;
 }) => {
   return (
-    <div className="bg-black dark:bg-gray-800 rounded-lg shadow-md p-6">
+    <div className="bg-gray dark:bg-gray-800 rounded-lg shadow-md p-6">
       <h2 className="text-xl font-bold dark:text-white mb-4">Filters</h2>
       <div className="grid gap-4">
         <div>
