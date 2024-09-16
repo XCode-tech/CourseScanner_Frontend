@@ -74,7 +74,7 @@ const CourseList = ({
         keywords="search IT certifications, PMP course, AWS certification, CEH course, CISA certification, CISSP training"
         pageUrl="https://coursescanner.ai/searchcourse"
       />
-      <div className="ml-[10%] bg-black dark:bg-gray-900 p-4 text-gray-900 dark:text-white">
+      <div className="ml-[10%] bg-gray-100 dark:bg-gray-900 p-4 text-gray-900 dark:text-white">
         <h1 className="text-3xl font-bold mb-8">All Searched Courses</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
           {filteredCourses.length > 0 ? (
@@ -93,19 +93,21 @@ const CourseList = ({
                   <h2 className="text-xl font-bold dark:text-white">
                     {course.coursename.split('\n')[0]}
                   </h2>
-                  <p className="text-muted-foreground mb-4 dark:text-gray-400">
+                  <p className="text-gray-700 dark:text-gray-400 mb-4">
                     Duration: {course.duration ? course.duration : 'TBD'}
                   </p>
-                  <p className="text-muted-foreground mb-4 dark:text-gray-400">
+                  <p className="text-gray-700 dark:text-gray-400 mb-4">
                     Start Date: {course.start_date ? course.start_date : 'TBD'}
                   </p>
-                  <p className="text-muted-foreground mb-4 dark:text-gray-400">
+                  <p className="text-gray-700 dark:text-gray-400 mb-4">
                     Company: {course.website}
                   </p>
                   <div className="flex items-center justify-between">
                     <span className="text-2xl font-bold">${course.price}</span>
                     <Link href={course.url} target="_blank" rel="noopener noreferrer">
-                      <Button size="sm">Enroll</Button>
+                      <Button size="sm" className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800">
+                        Enroll
+                      </Button>
                     </Link>
                   </div>
                 </div>
@@ -175,7 +177,7 @@ const Filters = ({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <Button className="w-full dark:bg-gray-700 dark:text-white" onClick={handleFilterChange}>
+        <Button className="w-full bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800" onClick={handleFilterChange}>
           Apply Filters
         </Button>
       </div>
@@ -227,24 +229,26 @@ const CoursesPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Filters
-        selectedPriceOrder={selectedPriceOrder}
-        setSelectedPriceOrder={setSelectedPriceOrder}
-        selectedDateOrder={selectedDateOrder}
-        setSelectedDateOrder={setSelectedDateOrder}
-        handleFilterChange={handleFilterChange}
-      />
-      <CourseList
-        courses={courses}
-        filteredCourses={filteredCourses}
-        applyFilters={applyFilters}
-        selectedPriceOrder={selectedPriceOrder}
-        selectedDateOrder={selectedDateOrder}
-        selectedRegion={selectedRegion}
-      />
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
+      <div className="p-4">
+        <Filters
+          selectedPriceOrder={selectedPriceOrder}
+          setSelectedPriceOrder={setSelectedPriceOrder}
+          selectedDateOrder={selectedDateOrder}
+          setSelectedDateOrder={setSelectedDateOrder}
+          handleFilterChange={handleFilterChange}
+        />
+        <CourseList
+          courses={courses}
+          filteredCourses={filteredCourses}
+          applyFilters={applyFilters}
+          selectedPriceOrder={selectedPriceOrder}
+          selectedDateOrder={selectedDateOrder}
+          selectedRegion={selectedRegion}
+        />
+      </div>
     </div>
   );
-};
+}
 
 export default CoursesPage;
