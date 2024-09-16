@@ -79,7 +79,7 @@ const CourseList = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
           {filteredCourses.length > 0 ? (
             filteredCourses.map(course => (
-              <div key={course.course_id} className="w-full sm:w-72 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md">
+              <div key={course.course_id} className="w-full sm:w-72 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md">
                 <div className="h-48">
                   <Image
                     src={course.brand_image || '/bg.png'}
