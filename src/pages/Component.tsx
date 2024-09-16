@@ -172,7 +172,7 @@ export function Component() {
         keywords="PMP certification, AWS course, CEH course, CISA certification"
         pageUrl="https://coursescanner.ai/"
       />
-        <div className="flex flex-col min-h-screen mt-10 bg-black">
+        <div className="flex flex-col min-h-screen bg-black">
             <main className="flex-1">
                 <section className="">
                     <div className="">
