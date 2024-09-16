@@ -28,7 +28,7 @@ interface BrandName {
     // Add other properties if present in your actual API response
 }
 
-export function Component() {
+export default function Component() {
     const BASE_URL = 'https://course-scanner-backend.vercel.app';
     const [selectedCourseId, setSelectedCourseId] = useState('');
     const [searchResults, setSearchResults] = useState([]);
