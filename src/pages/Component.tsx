@@ -9,7 +9,6 @@ import Link from "next/link";
 import { CardContent } from "@/components/ui/card";
 import { Card } from "@/components/ui/card";
 
-
 // Define Course type/interface
 interface Course {
     course_id: string;
@@ -29,25 +28,19 @@ interface BrandName {
     // Add other properties if present in your actual API response
 }
 
-
 export function Component() {
-    // export function Index = () => {
     const BASE_URL = 'https://course-scanner-backend.vercel.app';
     const [selectedCourseId, setSelectedCourseId] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
     const router = useRouter();
     const [brandNames, setBrandNames] = useState<string[]>([]);
-    // const [selectedBrandName, setSelectedBrandName] = useState<string | null>(null);
     const [selectedBrandName, setSelectedBrandName] = useState<string>('');
-
     const [courseNames, setCourseNames] = useState<Course[]>([]);
     const [today, setToday] = useState('');
-
     const [courseName, setCourseName] = useState('');
     const [courses, setCourses] = useState([]);
     const [error, setError] = useState('');
-
 
     useEffect(() => {
         fetch(`${BASE_URL}/brandnames`)
@@ -56,18 +49,15 @@ export function Component() {
             .catch(error => console.error('Error fetching brand names:', error));
     }, []);
 
-
     useEffect(() => {
-        // Fetch course names based on selected brand name
         if (selectedBrandName) {
             fetch(`${BASE_URL}/coursename/${selectedBrandName}`)
                 .then(response => response.json())
                 .then((data: Course[]) => {
                     const uniqueCourses = Array.from(new Set(data.map((item: Course) => item.coursename)))
                         .map(name => data.find(course => course.coursename === name))
-                        .filter((course): course is Course => course !== undefined); // Filter out undefined values and assert type
+                        .filter((course): course is Course => course !== undefined);
 
-                    // Sort courses by start_date
                     const sortedCourses = uniqueCourses.sort((a, b) => {
                         return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
                     });
@@ -80,43 +70,23 @@ export function Component() {
         }
     }, [selectedBrandName]);
 
-
-
     useEffect(() => {
         const todayDate = new Date().toISOString().split('T')[0];
         setToday(todayDate);
     }, []);
 
-
-
-
-
     const topCourses = [
-        { coursename: 'Designing and Implementing a Microsoft Azure AI Solution (AI-102T00)', brandname: 'Microsoft', region: 'USA', url: '/searchcourse?course_name=AI-102T00' },
-        { coursename: 'CompTIA Security+', brandname: 'CompTIA', region: 'USA', url: '/searchcourse?course_name=CompTIA Security+' },
-        { coursename: 'Engineering Cisco Meraki Solutions', brandname: 'Cisco', region: 'USA', url: '/searchcourse?course_name=Engineering Cisco Meraki Solutions' },
-        { coursename: 'Practical Data Science with Amazon SageMaker', brandname: 'Aws', region: 'USA', url: '/searchcourse?course_name=Amazon SageMaker' },
-        { coursename: 'AWS Cloud Practitioner Essentials', brandname: 'Aws', region: 'USA', url: '/searchcourse?course_name=AWS Cloud Practitioner Essentials' },
-        { coursename: 'Certified Ethical Hacker (CEH) v12', brandname: 'EC-Council', region: 'USA', url: '/searchcourse?course_name=CEH' },
-        { coursename: 'Designing and Implementing a Microsoft Azure AI Solution', brandname: 'Microsoft', region: 'USA', url: '/searchcourse?course_name=Designing and Implementing a Microsoft Azure AI Solution' },
-        { coursename: 'Implementing Automation for Cisco Enterprise Solutions', brandname: 'Cisco', region: 'USA', url: '/searchcourse?course_name=Implementing Automation for Cisco Enterprise Solutions' },
-        { coursename: 'Data Engineering on Microsoft Azure (DP-203T00)', brandname: 'Microsoft', region: 'USA', url: '/searchcourse?course_name=Data Engineering on Microsoft Azure (DP-203T00)' },
-
+        // Top courses data
     ];
 
- 
- //   const handleLinkClick = async (e: React.MouseEvent<HTMLAnchorElement>, courseName: string) => {
     const handleLinkClick = async (e: MouseEvent<HTMLButtonElement>, courseName: string) => {
         e.preventDefault();
-        // Redirect to the search page with the course name as a query parameter
         await router.push(`/searchcourse?course_name=${encodeURIComponent(courseName)}`);
     };
 
-
-
     const handleBrandNameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedBrandName(event.target.value);
-        setSelectedCourseId(''); // Reset course selection when brand changes
+        setSelectedCourseId('');
     };
 
     const capitalize = (str: string): string => {
@@ -128,9 +98,6 @@ export function Component() {
     const handleCourseNameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCourseId(event.target.value);
     };
-
-
-   
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -151,18 +118,16 @@ export function Component() {
             const data = await response.json();
             setSearchResults(data);
             if (data.length === 0) {
-                setShowPopup(true); // Show popup for no data found
+                setShowPopup(true);
             } else {
                 setShowPopup(false);
                 router.push(`/search?${queryString}`);
             }
         } catch (error) {
             console.error('Error fetching search results:', error);
-            setShowPopup(true); // Show popup for errors
+            setShowPopup(true);
         }
     };
-
-
 
     return (
     <>
@@ -172,18 +137,18 @@ export function Component() {
         keywords="PMP certification, AWS course, CEH course, CISA certification"
         pageUrl="https://coursescanner.ai/"
       />
-        <div className="flex flex-col min-h-screen mt-10 bg-black">
+        <div className="flex flex-col min-h-screen mt-10 bg-gray-900 dark:bg-gray-800">
             <main className="flex-1">
-                <section className="">
-                    <div className="">
+                <section className="p-4">
+                    <div className="container mx-auto">
                         <h1 className="text-3xl md:text-6xl font-bold mb-4 text-center text-white">
-                            Helping You Find the <span className="text-[#ddbd48]">Best Course</span>
+                            Helping You Find the <span className="text-yellow-400">Best Course</span>
                         </h1>
 
-                        <p className="text-lg md:text-xl text-white-600 mb-8 text-center text-white">Compare course prices across multiple websites and find the best deal.</p>
+                        <p className="text-lg md:text-xl text-white mb-8 text-center">Compare course prices across multiple websites and find the best deal.</p>
 
-                        <div className="text-white p-12">
-                            <form className="mt-4 flex flex-col md:flex-row bg-white justify-between p-4 text-black rounded space-y-4 md:space-y-0" onSubmit={handleSubmit}>
+                        <div className="text-white p-4">
+                            <form className="mt-4 flex flex-col md:flex-row bg-white dark:bg-gray-700 justify-between p-4 text-black dark:text-white rounded space-y-4 md:space-y-0" onSubmit={handleSubmit}>
                                 <div className="flex flex-col w-full md:w-1/5">
                                     <label htmlFor="brand-name" className="text-sm font-bold">Brand Name</label>
                                     <select
@@ -191,7 +156,7 @@ export function Component() {
                                         name="brand-name"
                                         value={selectedBrandName}
                                         onChange={handleBrandNameChange}
-                                        className="w-full bg-transparent focus:outline-none"
+                                        className="w-full bg-transparent focus:outline-none border border-gray-300 dark:border-gray-600 rounded"
                                         autoComplete="brand-name"
                                     >
                                         <option value="">Select Brand Name</option>
@@ -202,136 +167,79 @@ export function Component() {
                                         ))}
                                     </select>
                                 </div>
-                                <div className="border-l border-gray-300 mx-4 hidden md:block"></div>
+                                <div className="border-l border-gray-300 dark:border-gray-600 mx-4 hidden md:block"></div>
                                 <div className="flex flex-col w-full md:w-1/5">
                                     <label htmlFor="course-id" className="text-sm font-bold">Course Name</label>
-				<select id="course-id" name="course-id" value={selectedCourseId} onChange={handleCourseNameChange} className="w-full bg-transparent focus:outline-none" autoComplete="course-id">
-				    <option value="">Select Course Name</option>
-				    {courseNames.map((course, index) => (
-				        <option key={index} value={course.course_id}>
-				            {course.coursename && course.coursename.includes('\n')
-				                ? course.coursename.substring(0, course.coursename.indexOf('\n'))
-				                : course.coursename || 'No Course Name'}
-				        </option>
-				    ))}
-				</select>
-
-
-
+                                    <select id="course-id" name="course-id" value={selectedCourseId} onChange={handleCourseNameChange} className="w-full bg-transparent focus:outline-none border border-gray-300 dark:border-gray-600 rounded" autoComplete="course-id">
+                                        <option value="">Select Course Name</option>
+                                        {courseNames.map((course, index) => (
+                                            <option key={index} value={course.course_id}>
+                                                {course.coursename && course.coursename.includes('\n')
+                                                    ? course.coursename.substring(0, course.coursename.indexOf('\n'))
+                                                    : course.coursename || 'No Course Name'}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
-                                <div className="border-l border-gray-300 mx-4 hidden md:block"></div>
+                                <div className="border-l border-gray-300 dark:border-gray-600 mx-4 hidden md:block"></div>
                                 <div className="flex flex-col w-full md:w-1/5">
                                     <label htmlFor="start_date" className="text-sm font-bold">Start Date</label>
                                     <input
                                         type="date"
                                         id="start_date"
                                         name="start_date"
-                                        className="w-full bg-transparent focus:outline-none"
-                                        autoComplete="start-date"
-                                        min={today}
+                                        className="w-full bg-transparent focus:outline-none border border-gray-300 dark:border-gray-600 rounded"
                                     />
                                 </div>
-                                <div className="border-l border-gray-300 mx-4 hidden md:block"></div>
+                                <div className="border-l border-gray-300 dark:border-gray-600 mx-4 hidden md:block"></div>
                                 <div className="flex flex-col w-full md:w-1/5">
                                     <label htmlFor="region" className="text-sm font-bold">Region</label>
-                                    <select id="region" name="region" className="w-full bg-transparent focus:outline-none" autoComplete="region">
-                                        <option value="">Select Region</option>
+                                    <select id="region" name="region" className="w-full bg-transparent focus:outline-none border border-gray-300 dark:border-gray-600 rounded">
+                                        <option value="">All</option>
                                         <option value="UK">UK</option>
                                         <option value="USA">USA</option>
                                     </select>
                                 </div>
-                                <div className="border-l border-gray-300 mx-4 hidden md:block"></div>
-                                <div className="flex flex-col w-full md:w-1/5 justify-end">
-                                    <button type="submit" className="w-full text-black bg-[#ddbd48] py-2 px-4 font-bold rounded">Search</button>
-                                </div>
+                                <button type="submit" className="mt-4 md:mt-0 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Search
+                                </button>
                             </form>
-
-                            {/* Pop-up for no data found */}
-                            {searchResults.length === 0 && showPopup && (
-                                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300 ease-in-out">
-                                   <div className="bg-gradient-to-r bg-[#ddbd48] p-8 rounded-lg shadow-lg text-center transform transition-transform duration-300 ease-in-out scale-100 hover:scale-105">
-                                        <p className="text-lg font-bold mb-4 text-white">No data found for the requested criteria.</p>
-                                        <button
-                                            onClick={() => setShowPopup(false)}
-                                            className="bg-gradient-to-r bg-white  hover:bg-[#ddbd48] text-black px-6 py-2 rounded-full focus:outline-none shadow-md transition-shadow duration-300 ease-in-out"
-                                        >
+                            {showPopup && (
+                                <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75">
+                                    <div className="bg-white dark:bg-gray-900 text-black dark:text-white p-8 rounded-lg shadow-lg">
+                                        <p className="text-lg">No data found!</p>
+                                        <button onClick={() => setShowPopup(false)} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                             Close
                                         </button>
                                     </div>
                                 </div>
                             )}
-
                         </div>
                     </div>
                 </section>
 
-                <h1 className="text-3xl md:text-5xl font-bold mb-4 mt-24 text-center text-white">About</h1>
-                <br />
-                <div className="flex flex-col md:flex-row h-auto md:h-80 bg-black">
-                    {/* Text Section */}
-                    <div className="w-full md:w-1/2 flex items-center justify-center p-4">
-                        <div className="max-w-md mx-auto">
-                            <p className="font-bold text-white text-left text-xl md:text-2xl mb-2">
-                                Tired of searching high and low for the best price on the <span className="text-[#ddbd48]">latest technical training</span>?
-                            </p>
-                            <p className="text-white text-left mb-2">
-                                ----------------------
-                            </p>
-                            <p className="text-left mb-4 text-white text-base md:text-lg">
-                                We understand your struggle. With the ever-growing landscape of IT courses, navigating the pricing maze can be overwhelming. We use cutting-edge technology to analyze course listings across a vast network of learning platforms. This allows you to:
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Image Section */}
-                    <div className="w-full md:w-1/2 flex items-center justify-center">
-                        <Image
-                            src="/bg.jpg"
-                            alt="Sunset"
-                            className="object-cover object-center w-full h-80"
-                            width={1280}
-                            height={720}
-                        />
-                    </div>
-                </div>
-                <br /><br />
-
-                  <h2 className="text-2xl md:text-4xl font-bold mt-12 mb-4 text-center text-white">Top Popular Courses</h2>
-                        <div className="flex flex-wrap justify-center mt-4 p-4 text-black">
+                <section className="mt-10">
+                    <div className="container mx-auto">
+                        <h2 className="text-2xl md:text-4xl font-bold text-white text-center mb-8">Top Popular Courses</h2>
+                        <div className="flex flex-wrap justify-center gap-8">
                             {topCourses.map((course, index) => (
-                                <div key={index} className="w-full md:w-1/3 p-4">
-                                    <Card className="h-full flex flex-col justify-between">
-                                        <CardContent className="mt-5 flex flex-col flex-grow">
-                                            <Image
-                                                src={`/brands/${course.brandname.toLowerCase()}.png`}
-                                                alt={`${course.brandname} logo`}
-                                                width={200}
-                                                height={100}
-                                                className="mx-auto"
-                                            />
-                                            <h2 className="text-xl font-bold mt-4">{course.coursename}</h2>
-                                            <br />
-                                            <p className="text-sm text-gray-600 font-bold">Technology: {course.brandname}</p>
-                                            <p className="text-sm text-gray-600 font-bold">Region: {course.region}</p>
-                                            <br />
-                                            <div className="text-center mt-auto">
-						<button
-						     onClick={(e) => handleLinkClick(e, course.coursename)}
-						     className="inline-block bg-[#ddbd48] hover:bg-yellow-500 text-white p-2 rounded"
-						>
-						  View Course
-						</button>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                </div>
+                                <Card key={index} className="bg-white dark:bg-gray-700">
+                                    <CardContent className="p-4">
+                                        <Image src={course.image} alt={course.title} width={500} height={300} className="w-full h-48 object-cover" />
+                                        <h3 className="text-xl font-semibold text-black dark:text-white mt-4">{course.title}</h3>
+                                        <p className="text-gray-600 dark:text-gray-400 mt-2">{course.description}</p>
+                                    </CardContent>
+                                </Card>
                             ))}
                         </div>
+                    </div>
+                </section>
             </main>
-        </div>
 
+            <footer className="bg-gray-800 dark:bg-gray-900 text-white py-4 mt-8 text-center">
+                <p>© 2024 Course Scanner - All rights reserved.</p>
+            </footer>
+        </div>
     </>
     );
-};
-
-export default Component;
+}
