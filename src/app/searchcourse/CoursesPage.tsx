@@ -136,7 +136,7 @@ const Filters = ({
   handleFilterChange: () => void;
 }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+    <div className="bg-black dark:bg-gray-800 rounded-lg shadow-md p-6">
       <h2 className="text-xl font-bold dark:text-white mb-4">Filters</h2>
       <div className="grid gap-4">
         <div>
